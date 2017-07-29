@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="tree_survey_survey_view" model="ir.ui.view">
+            <field name="name">survey.survey.tree</field>
+            <field name="model">survey.survey</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="title" string="标题"/>
+                </tree>
+            </field>
+        </record>
+        <record id="form_survey_survey_view" model="ir.ui.view">
+            <field name="name">survey.survey.form</field>
+            <field name="model">survey.survey</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_title" style="width: 100%;">
+                            <label for="title" class="oe_edit_only"/>
+                            <h1>
+                                <field name="title" placeholder="Survey Title" string="标题"/>
+                            </h1>
+                        </div>
+                        <notebook>
+                            <page string="编辑页面和问题">
+                                <field name="page_ids" mode="tree" context="{'default_survey_id': active_id}"
+                                       nolabel="1">
+                                    <tree>
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="title"/>
+                                        <field name="question_ids"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="tree_survey_user_input" model="ir.ui.view">
+            <field name="name">tree_survey_user_input</field>
+            <field name="model">survey.user_input</field>
+            <field name="arch" type="xml">
+                <tree string="Survey User inputs" create="false">
+                    <field name="survey_id" string="标题"/>
+                    <field name="date_create"/>
+                    <field name="passive_name"/>
+                    <field name="evaluate_name"/>
+                    <field name="score"/>
+                    <field name="state"/>
+                    <field name="expire"/>
+                </tree>
+            </field>
+        </record>
+        <record id="form_survey_user_input" model="ir.ui.view">
+            <field name="name">form_survey_user_input</field>
+            <field name="model">survey.user_input</field>
+            <field name="arch" type="xml">
+                <form string="Survey User inputs" create="false">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="survey_id" string="标题"/>
+                                <field name="date_create"/>
+                                <field name="state"/>
+                            </group>
+                            <group>
+                                <field name="passive_name" readonly="1"/>
+                                <field name="evaluate_name" readonly="1"/>
+                                <field name="score" string="总得分"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="问题及答案">
+                                <field name="user_input_line_ids">
+                                    <tree>
+                                        <field name="question_id" string="评价问题"/>
+                                        <field name="value_number" string="评价得分"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="search_survey_user_input" model="ir.ui.view">
+            <field name="name">search_survey_user_input</field>
+            <field name="model">survey.user_input</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="survey_id"/>
+                    <field name="passive_name"/>
+
+                    <group expand="0" string="分组">
+                        <filter name="survey_id" string="标题" context="{'group_by':'survey_id'}"/>
+                        <filter name="passive_name" string="被评价人" context="{'group_by':'passive_name'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_survey_question" model="ir.actions.act_window">
+            <field name="name">评价试题</field>
+            <field name="res_model">survey.survey</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5,0,0),
+                                          (0,0,{'view_mode':'tree','view_id':ref('tree_survey_survey_view')}),
+                                          (0,0,{'view_mode':'form','view_id':ref('form_survey_survey_view')})]"/>
+        </record>
+        <record id="action_survey_answer" model="ir.actions.act_window">
+            <field name="name">试题答案</field>
+            <field name="res_model">survey.user_input</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="search_survey_user_input"/>
+            <field name="view_ids" eval="[(5,0,0),
+                                          (0,0,{'view_mode':'tree','view_id':ref('tree_survey_user_input')}),
+                                          (0,0,{'view_mode':'form','view_id':ref('form_survey_user_input')})]"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="module_category_latlng" model="ir.module.category">
+            <field name="name">Latlng 公司</field>
+            <field name="description">这是 Latlng 公司的管理权限</field>
+            <field name="sequence">0</field>
+        </record>
+
+        <record id="group_latlng_user" model="res.groups">
+            <field name="name">员工</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="latlng.module_category_latlng"/>
+        </record>
+        <record id="group_latlng_manager" model="res.groups">
+            <field name="name">管理员</field>
+            <field name="implied_ids" eval="[(4, ref('latlng.group_latlng_user'))]"/>
+            <field name="category_id" ref="latlng.module_category_latlng"/>
+        </record>
+
+        <record id="group_latlng_evaluate" model="res.groups">
+            <field name="name">Latlng-员工评价</field>
+            <field name="category_id" ref="base.module_category_hidden"/>
+        </record>
+        <record id="group_latlng_work_log" model="res.groups">
+            <field name="name">Latlng-工作日志</field>
+            <field name="category_id" ref="base.module_category_hidden"/>
+        </record>
+        <record id="group_latlng_countersign" model="res.groups">
+            <field name="name">Latlng-付款申请</field>
+            <field name="category_id" ref="base.module_category_hidden"/>
+        </record>
+
+    </data>
+</odoo>

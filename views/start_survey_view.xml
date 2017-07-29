@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="tree_start_survey" model="ir.ui.view">
+            <field name="name">start_evaluate.tree</field>
+            <field name="model">employee.start.survey</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="title"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="complete" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+        <record id="form_start_survey" model="ir.ui.view">
+            <field name="name">start_evaluate.form</field>
+            <field name="model">employee.start.survey</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="complete" invisible="1"/>
+                            <field name="title" attrs="{'readonly':[('complete','=',True)]}"/>
+                            <field name="start_date" attrs="{'readonly':[('complete','=',True)]}"/>
+                            <field name="end_date" attrs="{'readonly':[('complete','=',True)]}"/>
+                        </group>
+                        <notebook>
+                            <page string="被评价人">
+                                <field name="passive_evaluate_line" attrs="{'readonly':[('complete','=',True)]}">
+                                    <tree editable="bottom">
+                                        <field name="passive_evaluate_id" invisible="1"/>
+                                        <field name="passive_survey"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="参与评价人">
+                                <field name="evaluate_line" attrs="{'readonly':[('complete','=',True)]}">
+                                    <tree editable="bottom">
+                                        <field name="evaluate_id" invisible="1"/>
+                                        <field name="survey_people"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="form_survey" model="ir.ui.view">
+            <field name="name">survey.form</field>
+            <field name="model">employee.survey</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="evaluate_id" invisible="1"/>
+                            <field name="survey_people"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_start_survey" model="ir.actions.act_window">
+            <field name="name">发起评价</field>
+            <field name="res_model">employee.start.survey</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

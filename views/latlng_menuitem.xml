@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <menuitem
+                id="menu_main"
+                name="GOdoo"
+                sequence="0"
+                groups="group_latlng_user,group_latlng_manager"/>
+
+        <menuitem
+                id="menu_work_log"
+                name="工作日志"
+                parent="menu_main"
+                sequence="0"/>
+        <menuitem
+                id="menu_employee_log"
+                name="员工日志"
+                parent="menu_work_log"
+                action="action_employee_log"/>
+        <menuitem
+                id="menu_history_record"
+                name="历史记录"
+                parent="menu_work_log"
+                action="action_history_record"/>
+
+        <menuitem
+                id="menu_evaluate"
+                name="人员评价"
+                parent="menu_main"
+                sequence="1"/>
+        <menuitem
+                id="menu_employee_evaluate"
+                name="评价列表"
+                parent="menu_evaluate"
+                action="action_employee"/>
+        <menuitem
+                id="menu_start_survey"
+                name="发起评价"
+                parent="menu_evaluate"
+                action="action_start_survey"/>
+        <menuitem
+                id="menu_survey_question"
+                name="评价试题"
+                parent="menu_evaluate"
+                action="action_survey_question"/>
+        <menuitem
+                id="menu_survey_answer"
+                name="试题答案"
+                parent="menu_evaluate"
+                action="action_survey_answer"/>
+
+        <menuitem
+                id="menu_countersign"
+                name="会签"
+                parent="menu_main"
+                sequence="2"/>
+        <menuitem
+                id="menu_apply_money"
+                name="资金申请"
+                parent="menu_countersign"
+                action="action_apply_money"/>
+        <menuitem
+                id="menu_leader_countersign"
+                name="领导会签"
+                parent="menu_countersign"
+                action="action_leader_countersign"/>
+
+
+    </data>
+</odoo>

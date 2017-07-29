@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="tree_survey_question" model="ir.ui.view">
+            <field name="name">评价问题列表</field>
+            <field name="model">employee.passive.survey</field>
+            <field name="arch" type="xml">
+                <tree create="0">
+                    <field name="passive_evaluate_id" invisible="1"/>
+                    <field name="passive_survey"/>
+                    <field name="survey_title"/>
+                    <button name="action_survey_survey" string="人员测评" type="object"
+                            attrs="{'readonly':['|',('complete','=',True),('state','=',True)]}"/>
+                    <field name="state" invisible="1"/>
+                    <field name="complete"/>
+                </tree>
+            </field>
+        </record>
+        <record id="form_passive_survey" model="ir.ui.view">
+            <field name="name">passive.survey.form</field>
+            <field name="model">employee.passive.survey</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="passive_evaluate_id" invisible="1"/>
+                            <field name="passive_survey" readonly="1"/>
+                            <field name="survey_title" readonly="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_employee" model="ir.actions.act_window">
+            <field name="name">员工评价</field>
+            <field name="res_model">employee.passive.survey</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">
+                [('passive_evaluate_id.evaluate_line.survey_people.user_id.id','=',uid)]
+            </field>
+            <field name="view_id" ref="tree_survey_question"/>
+        </record>
+
+    </data>
+</odoo>

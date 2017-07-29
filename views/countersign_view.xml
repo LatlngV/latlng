@@ -1,0 +1,174 @@
+<odoo>
+    <data>
+
+        <record id="tree_leader_countersign" model="ir.ui.view">
+            <field name="name">tree_leader_countersign</field>
+            <field name="model">leader.countersign</field>
+            <field name="arch" type="xml">
+                <tree decoration-danger="state=='countersign'" decoration-warning="final_state=='cancel'"
+                      decoration-bf="final_state=='cancel'">
+                    <field name="name"/>
+                    <field name="department"/>
+                    <field name="title"/>
+                    <field name="datetime"/>
+                    <field name="state"/>
+                    <field name="hide_state" invisible="1"/>
+                    <field name="final_state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="form_leader_countersign" model="ir.ui.view">
+            <field name="name">form_leader_countersign</field>
+            <field name="model">leader.countersign</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_apply" states="apply" string="发起申请" type="object" class="btn-primary"/>
+                        <button name="action_confirm" states="countersign" string="确认" type="object"
+                                class="btn-primary"/>
+                        <button name="action_cancel" states="countersign" string="拒绝" type="object"/>
+                        <button name="action_reapply" states="finish" string="重新申请" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="apply,countersign,finish"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title" style="width: 100%; text-align:center; color:#0F0F0F;">
+                            <label for="title" class="oe_edit_only"
+                                   attrs="{'invisible':['|',('state','=','countersign'),('state','=','finish')]}"/>
+                            <h1>
+                                <field name="title"
+                                       attrs="{'readonly':['|',('state','=','countersign'),('state','=','finish')]}"/>
+                                <field name="hide_state" invisible="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name" options="{'no_open':True}"/>
+                                <field name="department"/>
+                                <field name="datetime"/>
+                                <label for="total"/>
+                                <div style="color:#FF0000; font-weight:bold;">
+                                    <field name="total"/>
+                                </div>
+                            </group>
+                            <group>
+                                <field name="receive_account"
+                                       attrs="{'readonly':['|',('state','=','countersign'),('state','=','finish')]}"/>
+                                <field name="payee"
+                                       attrs="{'readonly':['|',('state','=','countersign'),('state','=','finish')]}"/>
+                                <field name="bank"
+                                       attrs="{'readonly':['|',('state','=','countersign'),('state','=','finish')]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="申请详情">
+                                <field name="apply_detail_line"
+                                       attrs="{'readonly':['|',('state','=','countersign'),('state','=','finish')]}">
+                                    <tree editable="bottom">
+                                        <field name="number"/>
+                                        <field name="detail"/>
+                                        <field name="money"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="会签领导">
+                                <field name="leader_line"
+                                       attrs="{'readonly':['|',('state','=','countersign'),('state','=','finish')]}">
+                                    <tree editable="bottom">
+                                        <field name="leader" options="{'no_create':True}"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="search_leader_countersign" model="ir.ui.view">
+            <field name="name">search_leader_countersign</field>
+            <field name="model">leader.countersign</field>
+            <field name="arch" type="xml">
+                <search>
+
+                    <field name="name"/>
+                    <field name="department"/>
+                    <field name="datetime"/>
+
+                    <separator/>
+                        <filter name="countersign" domain="[('state','=','countersign')]" string="会签中"/>
+                        <filter name="finish" domain="[('state','=','finish')]" string="结束"/>
+                    <separator/>
+
+                    <group expand="0" string="分组">
+                        <filter name="name" string="姓名" context="{'group_by':'name'}"/>
+                        <filter name="department" string="部门" context="{'group_by':'department'}"/>
+                        <filter name="datetime" string="日期" context="{'group_by':'datetime:month'}"/>
+                    </group>
+
+                </search>
+            </field>
+        </record>
+
+        <record id="form_apply_detail" model="ir.ui.view">
+            <field name="name">form_apply_detail</field>
+            <field name="model">apply.detail</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="countersign_id" options="{'no_open':True}"/>
+                                <field name="money"/>
+                            </group>
+                            <group>
+                                <field name="number"/>
+                                <field name="detail"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="form_leader_line" model="ir.ui.view">
+            <field name="name">form_leader_line</field>
+            <field name="model">leader.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="leader_line_id" options="{'no_open':True}"/>
+                                <field name="leader" options="{'no_open':True}"/>
+                            </group>
+                            <group>
+                                <field name="state"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_apply_money" model="ir.actions.act_window">
+            <field name="name">资金申请</field>
+            <field name="res_model">leader.countersign</field>
+            <field name="domain">[('name','=',uid)]</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <record id="action_leader_countersign" model="ir.actions.act_window">
+            <field name="name">领导会签</field>
+            <field name="res_model">leader.countersign</field>
+            <field name="search_view_id" ref="search_leader_countersign"/>
+            <field name="domain">
+                [('leader_line.leader.user_id.id','=',uid),
+                '|',('state','=','finish'),('state','=','countersign')]
+            </field>
+            <field name="view_mode">tree,form,search</field>
+        </record>
+
+    </data>
+</odoo>
+        <!-- ['|',('name','=',uid),'&amp;',('leader_line.leader.user_id.id','=',uid), -->

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="record_employee_log_tree_view" model="ir.ui.view">
+            <field name="name">员工日志列表</field>
+            <field name="model">employee.log</field>
+            <field name="arch" type="xml">
+                <tree string="员工列表">
+                    <field name="employee"/>
+                    <field name="department"/>
+                    <field name="date"/>
+                    <field name="weekday"/>
+                    <field name="state" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+        <record id="record_employee_log_form_view" model="ir.ui.view">
+            <field name="name">员工日志</field>
+            <field name="model">employee.log</field>
+            <field name="arch" type="xml">
+                <form string="员工日志">
+                    <sheet>
+                        <group>
+                            <field name="employee" options="{'no_open':True}"/>
+                            <field name="department" options="{'no_create':True,'no_open':True}"/>
+                            <field name="date"/>
+                            <field name="weekday"/>
+                            <field name="state" invisible="1"/>
+                        </group>
+                        <notebook>
+                            <page string="工作日志列表">
+                                <field name="employee_line">
+                                    <tree editable="bottom">
+                                        <field name="number"/>
+                                        <field name="log_line"/>
+                                        <field name="level"/>
+                                        <field name="note"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="record_employee_log_search_view" model="ir.ui.view">
+            <field name="name">员工日志</field>
+            <field name="model">employee.log</field>
+            <field name="arch" type="xml">
+                <search>
+
+                    <field name="employee"/>
+                    <field name="department"/>
+                    <field name="date"/>
+                    <field name="weekday"/>
+
+                    <group string="分组">
+                        <filter name="employee" string="姓名" context="{'group_by':'employee'}"/>
+                        <filter name="department" string="部门" context="{'group_by':'department'}"/>
+                        <filter name="date" string="日期" context="{'group_by':'date'}"/>
+                        <filter name="weekday" string="星期" context="{'group_by':'weekday'}"/>
+                    </group>
+
+                </search>
+            </field>
+        </record>
+
+        <record id="record_history_record_tree_view" model="ir.ui.view">
+            <field name="name">员工日志列表</field>
+            <field name="model">employee.log</field>
+            <field name="arch" type="xml">
+                <tree create="0" unlink="0" string="员工列表">
+                    <field name="employee"/>
+                    <field name="department"/>
+                    <field name="date"/>
+                    <field name="weekday"/>
+                </tree>
+            </field>
+        </record>
+        <record id="record_history_record_form_view" model="ir.ui.view">
+            <field name="name">员工日志</field>
+            <field name="model">employee.log</field>
+            <field name="arch" type="xml">
+                <form string="员工日志">
+                    <sheet>
+                        <group>
+                            <field name="employee"/>
+                            <field name="department" class="oe_read_only"/>
+                            <field name="date"/>
+                            <field name="weekday"/>
+                        </group>
+                        <notebook>
+                            <page string="工作日志列表">
+                                <field name="employee_line" class="oe_read_only">
+                                    <tree editable="bottom">
+                                        <field name="number"/>
+                                        <field name="log_line"/>
+                                        <field name="level"/>
+                                        <field name="note"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="record_history_record_search_view" model="ir.ui.view">
+            <field name="name">员工日志</field>
+            <field name="model">employee.log</field>
+            <field name="arch" type="xml">
+                <search>
+
+                    <field name="employee"/>
+                    <field name="department"/>
+                    <field name="date"/>
+                    <field name="weekday"/>
+
+                    <group string="分组">
+                        <filter name="employee" string="姓名" context="{'group_by':'employee'}"/>
+                        <filter name="department" string="部门" context="{'group_by':'department'}"/>
+                        <filter name="date" string="日期" context="{'group_by':'date'}"/>
+                        <filter name="weekday" string="星期" context="{'group_by':'weekday'}"/>
+                    </group>
+
+                </search>
+            </field>
+        </record>
+
+        <record id="record_employee_line_view" model="ir.ui.view">
+            <field name="name">工作日志</field>
+            <field name="model">employee.line</field>
+            <field name="arch" type="xml">
+                <form string="工作日志">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="number"/>
+                                <field name="level"/>
+                                <field name="state"/>
+                            </group>
+                            <group>
+                                <field name="log_line"/>
+                                <field name="note"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_employee_log" model="ir.actions.act_window">
+            <field name="name">工作日志</field>
+            <field name="res_model">employee.log</field>
+            <field name="domain">[('employee','=',uid)]</field>
+            <field name="view_mode">tree,form,search</field>
+            <field name="view_ids" eval="[(5,0,0),
+                                          (0,0,{'view_mode':'tree','view_id':ref('record_employee_log_tree_view')}),
+                                          (0,0,{'view_mode':'form','view_id':ref('record_employee_log_form_view')})]"/>
+        </record>
+        <record id="action_history_record" model="ir.actions.act_window">
+            <field name="name">历史记录</field>
+            <field name="res_model">employee.log</field>
+            <field name="view_mode">tree,form,search</field>
+            <field name="view_ids" eval="[(5,0,0),
+                                          (0,0,{'view_mode':'tree','view_id':ref('record_history_record_tree_view')}),
+                                          (0,0,{'view_mode':'form','view_id':ref('record_history_record_form_view')})]"/>
+        </record>
+
+    </data>
+</odoo>
